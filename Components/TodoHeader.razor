@@ -1,0 +1,37 @@
+﻿@using Blazored.LocalStorage
+@inject ILocalStorageService localStorage
+
+<div class="header">
+    <h1 class="app-title">@AppTitle</h1>
+    <i class="@icon" 
+        @onclick="Toggle"></i>
+</div>
+
+@code {
+    [Parameter]
+    public string AppTitle { get; set; } = string.Empty;
+    [Parameter]
+    public EventCallback<bool> ToggleState { get; set; }
+    [Parameter]
+    public string LightIcon { get; set; } = string.Empty;
+    [Parameter]
+    public string DarkIcon { get; set; } = string.Empty;
+    private bool isDarkMode = false;
+    private string icon = string.Empty;
+
+    protected override async Task OnInitializedAsync() {
+        isDarkMode = await localStorage.GetItemAsync<bool>("IsDarkModeEnabled");
+        Console.WriteLine($"Theme is {isDarkMode} on init from Todo Header");
+        icon = isDarkMode ? LightIcon : DarkIcon;
+        Console.WriteLine($"Icon is:  {icon} on init");
+    }
+
+    private async Task Toggle() {
+        isDarkMode = !isDarkMode;
+        Console.WriteLine($"Theme is: {isDarkMode} on toggle");
+        await localStorage.SetItemAsync<bool>("IsDarkModeEnabled", isDarkMode);
+        icon = isDarkMode ? LightIcon : DarkIcon;
+        Console.WriteLine($"Icon is:  {icon} on init");
+        await ToggleState.InvokeAsync(isDarkMode);
+    }
+}

@@ -1,0 +1,64 @@
+﻿@page "/"
+@using TodoApplication.Models
+@using Blazored.LocalStorage
+@inject ILocalStorageService localStorage
+
+<PageTitle>Home</PageTitle>
+
+<div class="app-container @appTheme">
+    <div class="hero">
+        <div class="container">
+            <TodoHeader
+                AppTitle="TODO"
+                LightIcon="las la-sun"
+                DarkIcon="las la-moon"
+                ToggleState="ToggleTheme"
+            />
+
+            <div class="tasks-container">
+                <input type="text" placeholder="Create a new todo..." @bind="todoTitle" @bind:event="oninput"
+                    @onkeydown="AddTodo">
+
+                @foreach (var todo in todos)
+                {
+                    <div>
+                        <label>
+                            <input type="checkbox" @bind="todo.IsDone">
+                            @todo.Title
+                        </label>
+                        <span class="remove-icon" @onclick="() => RemoveTodo(todo)">x</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Todo> todos = new List<Todo>();
+    private string todoTitle = string.Empty;
+    private string appTheme = string.Empty;
+
+    protected async override Task OnInitializedAsync() {
+        //Get Theme values from Local Storage
+        appTheme = await localStorage.GetItemAsync<string>("appTheme") ?? "";
+    }
+
+    private void AddTodo(KeyboardEventArgs e) {
+        if (e.Key == "Enter") {
+            var newTodo = new Todo() { Title = todoTitle };
+            todos.Add(newTodo);
+            todoTitle = string.Empty;
+        }
+    }
+
+    private void RemoveTodo(Todo todo) {
+        todos.Remove(todo);
+    }
+
+    private async Task ToggleTheme(bool isDarkTheme) {
+        appTheme = isDarkTheme ? "dark-theme" : "";
+        await localStorage.SetItemAsync<string>("appTheme", appTheme);
+        Console.WriteLine($"Theme is {appTheme} on Toggle");
+    }
+}

@@ -1,0 +1,84 @@
+* {
+    box-sizing: border-box;
+}
+
+.app-container {
+    position: relative;
+    background-color: var(--secondary-color);
+    height: 100vh;
+}
+
+.hero {
+    display: block;
+    position: absolute;
+    height: 40vh;
+    background: var(--accent-color), var(--bground-img);
+    background-size: cover;
+    background-position: center 40%;
+    mix-blend-mode: normal;
+    width: 100%;
+    min-width: 500px;
+    transition: all .3s ease;
+}
+
+.footer {
+    position: relative;
+    display: block;
+    height: 40vh;
+    width: 100%;
+}
+
+.container {
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin: 50px auto;
+    display: flex;
+    width: 40%;
+    transition: 
+    width 0.5s ease, 
+    height 0.5s ease, 
+    font-size 0.5s ease, 
+    transform 0.5s ease;
+}
+
+.remove-icon:hover {
+    cursor: pointer;
+}
+
+.tasks-container {
+    width: 100%;
+}
+
+/* Todo Text Input */
+input[type="text"] {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    width: 100%;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    background-color: var(--primary-color);
+}
+
+input::placeholder {
+    font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 1200px) {
+    .container {
+        width: 60%;
+        transition: all .3s linear;
+    }
+}
+
+@media only screen and (max-width: 720px) {
+    .container {
+        width: 80%;
+        transition: all .3s linear;
+    }
+}
