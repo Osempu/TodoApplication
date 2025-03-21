@@ -1,0 +1,190 @@
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 0.5px solid var(--border-color);
+    background-color: var(--primary-color);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .checkbox-wrapper:hover .la-times {
+    visibility: visible;
+  }
+  
+  .checkbox-wrapper input[type="checkbox"] {
+    display: none;
+  }
+  
+  .checkbox-wrapper label {
+    --size: 30px;
+    --shadow: calc(var(--size) * .07) calc(var(--size) * .1);
+    position: relative;
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    background-color: #4158D0;
+    background-image: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .checkbox-wrapper label:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    width: calc(var(--size) * .7);
+    height: calc(var(--size) * .7);
+    margin: 0 auto;
+    background-color: #fff;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    box-shadow: inset 0 var(--shadow) #ffbeb8;
+    transition: 0.2s ease width, 0.2s ease height;
+  }
+  
+  .checkbox-wrapper label:hover:before {
+    width: calc(var(--size) * .55);
+    height: calc(var(--size) * .55);
+    box-shadow: inset 0 var(--shadow) #ff9d96;
+  }
+  
+  .checkbox-wrapper label:active {
+    transform: scale(0.9);
+  }
+  
+  .checkbox-wrapper .tick-mark {
+    position: absolute;
+    top: -1px;
+    right: 0;
+    left: calc(var(--size) * -.05);
+    width: calc(var(--size) * .6);
+    height: calc(var(--size) * .6);
+    margin: 0 auto;
+    margin-left: calc(var(--size) * .14);
+    transform: rotateZ(-40deg);
+  }
+  
+  .checkbox-wrapper .tick-mark:before,
+    .checkbox-wrapper .tick-mark:after {
+    content: "";
+    position: absolute;
+    background-color: #fff;
+    border-radius: 2px;
+    opacity: 0;
+    transition: 0.2s ease transform, 0.2s ease opacity;
+  }
+  
+  .checkbox-wrapper .tick-mark:before {
+    left: 0;
+    bottom: 0;
+    width: calc(var(--size) * .1);
+    height: calc(var(--size) * .3);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.23);
+    transform: translateY(calc(var(--size) * -.68));
+  }
+  
+  .checkbox-wrapper .tick-mark:after {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(var(--size) * .1);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.23);
+    transform: translateX(calc(var(--size) * .78));
+  }
+  
+  .checkbox-wrapper input[type="checkbox"]:checked + label {
+    background-color: #4158D0;
+    background-image: var(--accent-color);
+  
+  }
+  
+  .checkbox-wrapper input[type="checkbox"]:checked + label:before {
+    width: 0;
+    height: 0;
+  }
+  
+  .checkbox-wrapper input[type="checkbox"]:checked + label .tick-mark:before,
+    .checkbox-wrapper input[type="checkbox"]:checked + label .tick-mark:after {
+    transform: translate(0);
+    opacity: 1;
+  }
+  
+  .task-title {
+    margin-left: 10px;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+  }
+  
+  .la-times {
+    margin-left: auto;
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    visibility: hidden;
+  }
+  
+  .la-times:hover {
+    background-color: rgba(240, 240, 240, 0.8);
+    padding: 2px;
+    border-radius: 50%;
+    color: #0a0a0a
+  }
+  
+  .strikeout-gradient {
+    background-image: var(--accent-color);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent; /* Makes the gradient visible */
+    position: relative; /* Enables positioning of the pseudo-element */
+  }
+  
+  .strikeout-gradient::after {
+    content: ''; /* Required for pseudo-element */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%; /* Positions the line in the middle of the text */
+    height: 2px; /* Adjust for thickness of the line */
+    background-color: rgba(0, 0, 0, 0.5); /* A semi-transparent black or any desired color */
+    transform: translateY(-50%); /* Centers the line perfectly */
+  }
+  
+  /* Add Animation */
+  .add-task {
+    animation: grow 0.3s ease backwards;
+  }
+  
+  /* Keyframes for grow (adding a task) */
+  @keyframes grow {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+  }
+  
+  /* Remove Animation */
+  .remove-task {
+    animation: shrink 0.4s ease forwards;
+    opacity: 0;
+  }
+  
+  /* Keyframes for shrink (removing a task) */
+  @keyframes shrink {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+  }

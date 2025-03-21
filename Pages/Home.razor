@@ -15,20 +15,20 @@
                 ToggleState="ToggleTheme"
             />
 
-            <div class="tasks-container">
+            <div class="body-container">
                 <input type="text" placeholder="Create a new todo..." @bind="todoTitle" @bind:event="oninput"
                     @onkeydown="AddTodo">
 
-                @foreach (var todo in todos)
-                {
-                    <div>
-                        <label>
-                            <input type="checkbox" @bind="todo.IsDone">
-                            @todo.Title
-                        </label>
-                        <span class="remove-icon" @onclick="() => RemoveTodo(todo)">x</span>
-                    </div>
-                }
+                <div class="todos-container">
+                    @foreach (var todo in todos.Select((item, index) => new {item, index}))
+                    {
+                        string elementId = $"task-{todo.index}";
+                        <TodoComponent 
+                            Todo="todo.item" 
+                            TodoId="@elementId"
+                            RemoveTodoCallback="RemoveTodo"/>
+                    }
+                </div>
             </div>
         </div>
     </div>

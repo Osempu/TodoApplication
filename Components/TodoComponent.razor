@@ -1,0 +1,34 @@
+﻿@using TodoApplication.Models
+
+<div class="checkbox-wrapper add-task @removeAnimation">
+    <input id="@TodoId" type="checkbox" @bind="Todo.IsDone">
+    <label for="@TodoId">
+        <div class="tick-mark"></div>
+    </label>
+    <span class="task-title @StrikeoutClass" @onclick="CheckTask">@Todo.Title</span>
+    <i class="las la-times" @onclick="RemoveTodo"></i>
+</div>
+
+@code {
+    [Parameter]
+    public Todo Todo {get; set;} = new();
+    
+    [Parameter]
+    public string TodoId {get; set;} = string.Empty;
+    
+    [Parameter]
+    public EventCallback<Todo> RemoveTodoCallback {get; set;}
+    private string StrikeoutClass => Todo.IsDone ? "strikeout-gradient" : "";
+    private string removeAnimation = string.Empty;
+
+    private void CheckTask() {
+        this.Todo.IsDone = !this.Todo.IsDone;
+    }
+
+    private async Task RemoveTodo() {
+        removeAnimation = "remove-task";
+        await Task.Delay(300);
+
+        await RemoveTodoCallback.InvokeAsync(this.Todo);
+    }
+}
