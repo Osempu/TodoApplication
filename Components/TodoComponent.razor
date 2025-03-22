@@ -1,6 +1,6 @@
 ﻿@using TodoApplication.Models
 
-<div class="checkbox-wrapper add-task @removeAnimation">
+<div class="checkbox-wrapper add-task @RemoveAnimation">
     <input id="@TodoId" type="checkbox" @bind="Todo.IsDone">
     <label for="@TodoId">
         <div class="tick-mark"></div>
@@ -19,14 +19,15 @@
     [Parameter]
     public EventCallback<Todo> RemoveTodoCallback {get; set;}
     private string StrikeoutClass => Todo.IsDone ? "strikeout-gradient" : "";
-    private string removeAnimation = string.Empty;
+    [Parameter]
+    public string RemoveAnimation {get; set;} = string.Empty;
 
     private void CheckTask() {
         this.Todo.IsDone = !this.Todo.IsDone;
     }
 
     private async Task RemoveTodo() {
-        removeAnimation = "remove-task";
+        this.RemoveAnimation = "remove-task";
         await Task.Delay(300);
 
         await RemoveTodoCallback.InvokeAsync(this.Todo);

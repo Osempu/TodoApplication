@@ -22,10 +22,11 @@
                 <div class="todos-container">
                     @foreach (var todo in todos.Select((item, index) => new {item, index}))
                     {
-                        string elementId = $"task-{todo.index}";
+                        string elementId = $"task-{@todo.index}";
                         <TodoComponent 
-                            Todo="todo.item" 
+                            Todo="@todo.item" 
                             TodoId="@elementId"
+                            RemoveAnimation="@String.Empty"
                             RemoveTodoCallback="RemoveTodo"/>
                     }
                 </div>
@@ -42,18 +43,22 @@
     protected async override Task OnInitializedAsync() {
         //Get Theme values from Local Storage
         appTheme = await localStorage.GetItemAsync<string>("appTheme") ?? "";
+        
+        todos = await localStorage.GetItemAsync<List<Todo>>("todos") ?? Enumerable.Empty<Todo>().ToList();
     }
 
-    private void AddTodo(KeyboardEventArgs e) {
+    private async Task AddTodo(KeyboardEventArgs e) {
         if (e.Key == "Enter") {
             var newTodo = new Todo() { Title = todoTitle };
             todos.Add(newTodo);
+            await localStorage.SetItemAsync("todos", todos);
             todoTitle = string.Empty;
         }
     }
 
-    private void RemoveTodo(Todo todo) {
+    private async Task RemoveTodo(Todo todo) {
         todos.Remove(todo);
+        await localStorage.SetItemAsync("todos", todos);
     }
 
     private async Task ToggleTheme(bool isDarkTheme) {
