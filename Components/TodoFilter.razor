@@ -1,0 +1,41 @@
+﻿<div class="filter-container">
+    <span class="items-left"> @ItemsLeft items left</span>
+
+    <InputRadioGroup @bind-Value="selectedOption">
+        <div class="radio-group">
+            @foreach(var filter in FilterOptions)
+            {
+                <label @onclick="() => FilterTasksBy(filter.Key)" class="radio-label">
+                <span class="radio-mask">
+                    <InputRadio Value="@filter.Key"/>
+                </span>
+                    @filter.Value
+                </label>
+            }
+        </div>
+    </InputRadioGroup>
+
+    <span class="clear-completed" @onclick="ClearCompletedTasks">Clear Completed</span>
+</div>
+
+@code {
+    [Parameter]
+    public int ItemsLeft { get; set; }
+    [Parameter]
+    public Dictionary<string, string> FilterOptions { get; set; } = new();
+    [Parameter]
+    public EventCallback ClearCompleted { get; set; }
+    [Parameter]
+    public EventCallback<string> FilterBy { get; set;}
+    private string selectedOption = "all";
+
+    private void ClearCompletedTasks() {
+        selectedOption = "all";
+        ClearCompleted.InvokeAsync();
+    }
+
+    private void FilterTasksBy(string taskStatus) {
+        selectedOption = taskStatus;
+        FilterBy.InvokeAsync(taskStatus);
+    }
+}

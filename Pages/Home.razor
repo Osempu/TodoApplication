@@ -1,9 +1,10 @@
-﻿@page "/"
+@page "/"
 @using TodoApplication.Models
 @using Blazored.LocalStorage
 @inject ILocalStorageService localStorage
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Todo Application</PageTitle>
+
 
 <div class="app-container @appTheme">
     <div class="hero">
@@ -27,7 +28,8 @@
                             Todo="@todo.item" 
                             TodoId="@elementId"
                             RemoveAnimation="@String.Empty"
-                            RemoveTodoCallback="RemoveTodo"/>
+                            OnRemoveTodo="RemoveTodo"
+                            OnCheckTodo="UpdateTodoList"/>
                     }
                 </div>
             </div>

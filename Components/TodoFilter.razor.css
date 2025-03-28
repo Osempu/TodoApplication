@@ -1,0 +1,50 @@
+.filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: var(--primary-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow-x: hidden;
+}
+
+ span {
+    font-size: 10pt;
+    color: #afafaf;
+    font-weight: bold;
+}
+
+span:hover:not(:first-child) {
+    cursor: pointer;
+    font-size: 10pt;
+    color: #6f6f6f;
+    font-weight: bold;
+}
+
+.radio-group {
+    display: flex;
+    gap: 3px;
+    justify-items: center;
+}
+
+.radio-group label{
+  padding: 2px 4px;
+  cursor: pointer;
+  font-size: 10pt;
+  font-weight: bold;
+  color: #afafaf;
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.radio-group label:has(input:checked) {
+  color: #5596FF;
+  transform: scale(1.09);
+}
+
+.radio-mask {
+  display: none;
+}

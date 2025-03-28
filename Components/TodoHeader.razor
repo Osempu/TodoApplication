@@ -21,17 +21,13 @@
 
     protected override async Task OnInitializedAsync() {
         isDarkMode = await localStorage.GetItemAsync<bool>("IsDarkModeEnabled");
-        Console.WriteLine($"Theme is {isDarkMode} on init from Todo Header");
         icon = isDarkMode ? LightIcon : DarkIcon;
-        Console.WriteLine($"Icon is:  {icon} on init");
     }
 
     private async Task Toggle() {
         isDarkMode = !isDarkMode;
-        Console.WriteLine($"Theme is: {isDarkMode} on toggle");
         await localStorage.SetItemAsync<bool>("IsDarkModeEnabled", isDarkMode);
         icon = isDarkMode ? LightIcon : DarkIcon;
-        Console.WriteLine($"Icon is:  {icon} on init");
         await ToggleState.InvokeAsync(isDarkMode);
     }
 }

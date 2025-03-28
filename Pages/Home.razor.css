@@ -76,7 +76,35 @@ input::placeholder {
     border-top-right-radius: 5px;
     overflow-x: hidden;
     background-color: var(--primary-color);
+    overflow-y: hidden;
+    height: auto;
+    max-height: 400px;
+    transition: 0.3s ease;
 }
+
+.todos-container:hover {
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #aaa;
+    opacity: 0;
+    transition: opacity 0.3 ease;
+}
+
 
 @media only screen and (max-width: 1200px) {
     .container {
