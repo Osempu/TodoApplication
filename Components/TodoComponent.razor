@@ -1,35 +1,37 @@
 ﻿@using TodoApplication.Models
-
 <div class="checkbox-wrapper add-task @RemoveAnimation">
-    <input id="@TodoId" type="checkbox" @bind="Todo.IsDone">
-    <label for="@TodoId">
-        <div class="tick-mark"></div>
-    </label>
-    <span class="task-title @StrikeoutClass" @onclick="CheckTask">@Todo.Title</span>
-    <i class="las la-times" @onclick="RemoveTodo"></i>
+    <div class="task-container" @onclick="CheckTask">
+        <input type="checkbox" @bind="Todo.IsDone">
+        <label>
+            <div class="tick-mark"></div>
+        </label>
+        <span class="task-title @StrikeoutClass">@Todo.Title</span>
+    </div>
+    <div class="icon-container">
+        <i class="las la-times" @onclick="RemoveTodo"></i>
+    </div>
 </div>
 
 @code {
     [Parameter]
     public Todo Todo {get; set;} = new();
-    
     [Parameter]
-    public string TodoId {get; set;} = string.Empty;
-    
+    public EventCallback<Todo> OnRemoveTodo {get; set;}
     [Parameter]
-    public EventCallback<Todo> RemoveTodoCallback {get; set;}
-    private string StrikeoutClass => Todo.IsDone ? "strikeout-gradient" : "";
+    public EventCallback OnCheckTodo {get; set;}
     [Parameter]
     public string RemoveAnimation {get; set;} = string.Empty;
+    private string StrikeoutClass => Todo.IsDone ? "strikeout-gradient" : "";
 
     private void CheckTask() {
         this.Todo.IsDone = !this.Todo.IsDone;
+        OnCheckTodo.InvokeAsync();
     }
 
     private async Task RemoveTodo() {
         this.RemoveAnimation = "remove-task";
-        await Task.Delay(300);
+        await Task.Delay(100);
 
-        await RemoveTodoCallback.InvokeAsync(this.Todo);
+        await OnRemoveTodo.InvokeAsync(this.Todo);
     }
 }

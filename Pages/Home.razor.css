@@ -76,22 +76,20 @@ input::placeholder {
     border-top-right-radius: 5px;
     overflow-x: hidden;
     background-color: var(--primary-color);
-    overflow-y: hidden;
+    overflow-y: scroll;
     height: auto;
     max-height: 400px;
-    transition: 0.3s ease;
 }
 
-.todos-container:hover {
-    overflow-y: scroll;
+.no-tasks-text {
+    padding: 5px;
+    text-align: center;
+    color: #8f8f8f;
+    font-weight: 500;
 }
 
 ::-webkit-scrollbar {
     width: 6px;
-}
-
-::-webkit-scrollbar:horizontal {
-    height: 6px;
 }
 
 ::-webkit-scrollbar-track {

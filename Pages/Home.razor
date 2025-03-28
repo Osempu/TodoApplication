@@ -1,4 +1,4 @@
-@page "/"
+﻿@page "/"
 @using TodoApplication.Models
 @using Blazored.LocalStorage
 @inject ILocalStorageService localStorage
@@ -21,17 +21,29 @@
                     @onkeydown="AddTodo">
 
                 <div class="todos-container">
-                    @foreach (var todo in todos.Select((item, index) => new {item, index}))
+                    @if(!todos.Any()) 
                     {
-                        string elementId = $"task-{@todo.index}";
-                        <TodoComponent 
-                            Todo="@todo.item" 
-                            TodoId="@elementId"
-                            RemoveAnimation="@String.Empty"
-                            OnRemoveTodo="RemoveTodo"
-                            OnCheckTodo="UpdateTodoList"/>
+                        <p class="no-tasks-text">
+                            Start adding some tasks! ✅
+                        </p>
+                    } else 
+                    {
+                        @foreach (var todo in todos)
+                        {
+                            <TodoComponent 
+                                Todo="todo" 
+                                RemoveAnimation="@String.Empty"
+                                OnRemoveTodo="RemoveTodo"
+                                OnCheckTodo="UpdateTodoList"/>
+                        }
                     }
                 </div>
+
+                <TodoFilter
+                    ItemsLeft="todos.Count()" 
+                    FilterOptions="filterOptions" 
+                    FilterBy="FilterTodoList" 
+                    ClearCompleted="ClearCompletedTasks"/>
             </div>
         </div>
     </div>
@@ -41,21 +53,30 @@
     private List<Todo> todos = new List<Todo>();
     private string todoTitle = string.Empty;
     private string appTheme = string.Empty;
+    public Dictionary<string, string> filterOptions = new();
 
     protected async override Task OnInitializedAsync() {
         //Get Theme values from Local Storage
         appTheme = await localStorage.GetItemAsync<string>("appTheme") ?? "";
         
         todos = await localStorage.GetItemAsync<List<Todo>>("todos") ?? Enumerable.Empty<Todo>().ToList();
+
+        filterOptions.Add("all", "All");
+        filterOptions.Add("active", "Active");
+        filterOptions.Add("completed", "Completed");
     }
 
     private async Task AddTodo(KeyboardEventArgs e) {
-        if (e.Key == "Enter") {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(todoTitle)) {
             var newTodo = new Todo() { Title = todoTitle };
             todos.Add(newTodo);
             await localStorage.SetItemAsync("todos", todos);
             todoTitle = string.Empty;
         }
+    }
+
+    private async Task UpdateTodoList() {
+        await localStorage.SetItemAsync("todos", todos);
     }
 
     private async Task RemoveTodo(Todo todo) {
@@ -66,6 +87,23 @@
     private async Task ToggleTheme(bool isDarkTheme) {
         appTheme = isDarkTheme ? "dark-theme" : "";
         await localStorage.SetItemAsync<string>("appTheme", appTheme);
-        Console.WriteLine($"Theme is {appTheme} on Toggle");
+    }
+
+    private async Task FilterTodoList(string filterOption)
+    {
+        todos = await localStorage.GetItemAsync<List<Todo>>("todos") ?? Enumerable.Empty<Todo>().ToList();
+
+         todos = filterOption switch
+        {
+            "active" =>  todos.Where(x => !x.IsDone).ToList(),
+            "completed" => todos.Where(x => x.IsDone).ToList(),
+            _ =>  await localStorage.GetItemAsync<List<Todo>>("todos") ?? Enumerable.Empty<Todo>().ToList()
+        };
+    }
+
+    private async Task ClearCompletedTasks() {
+        todos = await localStorage.GetItemAsync<List<Todo>>("todos") ?? Enumerable.Empty<Todo>().ToList();
+        todos = todos.Where(x => !x.IsDone).ToList();
+        await localStorage.SetItemAsync("todos", todos);
     }
 }

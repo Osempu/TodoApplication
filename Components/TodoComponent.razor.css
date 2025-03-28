@@ -1,10 +1,17 @@
 .checkbox-wrapper {
     display: flex;
     align-items: center;
-    padding: 20px;
     border-bottom: 0.5px solid var(--border-color);
     background-color: var(--primary-color);
     transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .task-container {
+    flex: 0 0 85%;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
   }
   
   .checkbox-wrapper:hover .la-times {
@@ -119,6 +126,10 @@
     color: var(--text-color);
     cursor: pointer;
   }
+
+  .icon-container {
+    flex-grow: 1;
+  }
   
   .la-times {
     margin-left: auto;
@@ -173,7 +184,7 @@
   
   /* Remove Animation */
   .remove-task {
-    animation: shrink 0.4s ease forwards;
+    animation: shrink 0.3s ease forwards;
     opacity: 0;
   }
   
