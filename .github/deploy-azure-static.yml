@@ -1,0 +1,52 @@
+name: Deploy web app to Azure Static Web App
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+env:
+  APP_LOCATION: "/"
+  API_LOCATION: "/api"
+  APP_ARTIFACT_LOCATION: "build"
+  AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+
+permissions:
+  contents: read
+
+jobs:
+  build_and_deploy_job:
+    permissions:
+      content: read
+      pull-requests: write
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: 👷🏾‍♀️ Build and 🚀 Deploy
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: 👷🏾‍♀️Build and 🚀Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: $"{{env.AZURE_STATIC_WEB_APPS_API_TOKEN}}"
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          action: "upload"
+          app_location: ${{env.APP_LOCATION}}
+          api_location: ${{env.API_LOCATION}}
+          app_artifact_location: ${{env.APP_ARTIFACT_LOCATION}}
+  close_pull_request_job:
+    permissions:
+      content: none
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: 🔐 Close Pull Request Job
+    steps:
+      - name: 🔐 Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: $"{{env.AZURE_STATIC_WEB_APPS_API_TOKEN}}"
+          action: 'close'
